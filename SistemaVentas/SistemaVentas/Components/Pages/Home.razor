@@ -1,0 +1,61 @@
+﻿@page "/"
+@using SistemaVentas.Data
+@inject NavigationManager Nav
+
+<h2>Listado de empleados</h2>
+
+<div class="empleados-container">
+    <table>
+        <tr>
+            <td>
+                <div class="empleados-activos">
+                    <h3>Empleados activos</h3>
+                    <ul>
+                        @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Activo))
+                        {
+                            <li>@emp.Nombre @emp.Apellido</li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="empleados-inactivos">
+                    <h3>Empleados inactivos</h3>
+                    <ul>
+                        @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Inactivo))
+                        {
+                            <li>@emp.Nombre @emp.Apellido</li>
+                        }
+                    </ul>
+                </div>
+            </td>
+            <td>
+                <div class="empleados-total">
+                    <h3>Todos los empleados</h3>
+                    <ul>
+                        @foreach (var emp in empleados)
+                        {
+                            <li>@emp.Nombre @emp.Apellido (@emp.Estado)</li>
+                        }
+                    </ul>
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<a class="btn-nuevo" @onclick="IrANuevo">Agregar nuevo empleado</a>
+<button type="button" @onclick="IrANuevo" id="botonEnviarAlerta">Send</button>
+
+@code {
+    List<Empleado> empleados = new()
+    {
+        new Empleado { Nombre = "Juan", Apellido = "Pérez", Estado = EstadoEmpleado.Activo },
+        new Empleado { Nombre = "Ana", Apellido = "Gómez", Estado = EstadoEmpleado.Inactivo },
+        new Empleado { Nombre = "Luis", Apellido = "Martínez", Estado = EstadoEmpleado.Activo }
+    };
+
+    private void IrANuevo()
+    {
+        Nav.NavigateTo("/nuevo");
+    }
+}

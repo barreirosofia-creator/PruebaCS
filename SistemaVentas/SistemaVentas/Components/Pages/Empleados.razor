@@ -1,0 +1,59 @@
+﻿@page "/empleados"
+@attribute [StreamRendering]
+
+<PageTitle>Listado de empleados</PageTitle>
+
+<h1>Empleados</h1>
+
+
+@if (empleados == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Estado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var empleado in empleados)
+            {
+                <tr>
+                    <td>@empleado.Nombre</td>
+                    <td>@empleado.Apellido</td>
+                    <td>@empleado.Estado.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    List<Empleado> empleados = new()
+{
+    new Empleado { Nombre = "Juan", Apellido = "Pérez", Estado = EstadoEmpleado.Activo },
+    new Empleado { Nombre = "Ana", Apellido = "Gómez", Estado = EstadoEmpleado.Inactivo },
+    new Empleado { Nombre = "Luis", Apellido = "Martínez", Estado = EstadoEmpleado.Activo }
+};
+
+    protected override async Task OnInitializedAsync()
+    {
+        // // Simulate asynchronous loading to demonstrate streaming rendering
+        // await Task.Delay(500);
+
+        // var startDate = DateOnly.FromDateTime(DateTime.Now);
+        // var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        // forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        // {
+        //     Date = startDate.AddDays(index),
+        //     TemperatureC = Random.Shared.Next(-20, 55),
+        //     Summary = summaries[Random.Shared.Next(summaries.Length)]
+        // }).ToArray();
+    }
+
+}
