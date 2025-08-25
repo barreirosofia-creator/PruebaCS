@@ -4,6 +4,7 @@
 @inject IEmpleadoApiService EmpleadosService
 @inject IConexionDbService ConexionDbService
 
+
 <h2>Listado de empleados</h2>
 
 <div class="empleados-container">
@@ -28,7 +29,7 @@
             </ul>
         </div>
     </div>
-        <div class="empleados-total w-50" style="border: 2px solid #ccc; border-radius: 10px; padding: 15px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" >
+    <div class="empleados-total w-50" style="border: 2px solid #ccc; border-radius: 10px; padding: 15px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
         <h3>Todos los empleados</h3>
         <ul>
             @foreach (var emp in empleados)
@@ -54,9 +55,10 @@
     protected override async Task OnInitializedAsync()
     {
         var conectado = await ConexionDbService.ProbarConexionAsync();
-        mensaje = conectado ? "✅ Conexión exitosa con EF" : "❌ Falló la conexión";
+        mensaje = conectado ? " Conexión exitosa con EF" : "Falló la conexión";
+
+
+
+
     }
-
-
-
 }
