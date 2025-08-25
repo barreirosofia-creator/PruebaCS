@@ -4,27 +4,24 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using SistemaVentas.Models;
 using SistemaVentas.Services.IRepository;
-using Microsoft.AspNetCore.Http;
-using System.Text.Json.Serialization;
-using Newtonsoft.Json;
 
 namespace SistemaVentas.Services
 {
 
-    public class StatusApiService : IStatusApiService
+    public class ConsultaVentasService : IConsultaVentasService
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _config;
-        public StatusApiService(HttpClient http, IConfiguration config)
+        public ConsultaVentasService(HttpClient http, IConfiguration config)
         {
             _httpClient = http;
             _config = config;
         }
 
-        public async Task<string> ObtenerInformacionStatus()
+        public async Task<string> ObtenerTotalVentas()
         {
             string respuesta = string.Empty;
-            var url = _config["ApiUrls:UrlconsultaApi"];
+            var url = _config["ApiUrls:UrlconsultaVentas"];
             try
             {
                 using (var httpResponse = await _httpClient.GetAsync(url))
@@ -38,10 +35,10 @@ namespace SistemaVentas.Services
             {
                 respuesta = $"Error: {ex.Message}";
             }
-            
+
             return respuesta;
         }
-
     }
+
 }
 

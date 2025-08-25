@@ -1,50 +1,52 @@
 ﻿@page "/nuevo"
-@using System.ComponentModel.DataAnnotations
 @inject NavigationManager Nav
-
+@inject IEmpleadoApiService empleadosService
 <h2>Nuevo empleado</h2>
 
-<EditForm Model="@nuevoEmpleado" OnValidSubmit="GuardarEmpleado">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
+<div class="form-group">
+    <label>Nombre:</label>
+    <input type="text" class="form-control" @bind="nuevoEmpleado.Nombre" />
+</div>
 
-    <div class="form-group">
-        <label>Nombre:</label>
-        <input class="form-control @(string.IsNullOrWhiteSpace(nuevoEmpleado.Nombre) ? "is-invalid" : "")" />
-        <ValidationMessage For="@(() => nuevoEmpleado.Nombre)" />
-    </div>
+<div class="form-group">
+    <label>Apellido:</label>
+    <input type="text" class="form-control" @bind="nuevoEmpleado.Apellido" />
+</div>
 
-    <div class="form-group">
-        <label>Apellido:</label>
-        <input class="form-control @(string.IsNullOrWhiteSpace(nuevoEmpleado.Apellido) ? "is-invalid" : "")" />  
-        <ValidationMessage For="@(() => nuevoEmpleado.Apellido)" />
-    </div>
-
-    <div class="form-group">
-        <label>Estado:</label>
-        <InputSelect @bind-Value="nuevoEmpleado.Estado" class="form-control">
-            <option value="">-- Seleccionar --</option>
-            @foreach (EstadoEmpleado estado in Enum.GetValues(typeof(EstadoEmpleado)))
-            {
-                <option value="@estado">@estado</option>
-            }
-        </InputSelect>
-
-        <ValidationMessage For="@(() => nuevoEmpleado.Estado)" />
-    </div>
-
-    <button type="submit" class="btn-guardar">Guardar</button>
-</EditForm>
+<div class="form-group">
+    <label>Estado:</label>
+    <select class="form-control" @bind="nuevoEmpleado.Estado">
+        <option value="">-- Seleccionar --</option>
+        @foreach (EstadoEmpleado estado in Enum.GetValues(typeof(EstadoEmpleado)))
+        {
+            <option value="@estado">@estado</option>
+        }
+    </select>
+</div>
+<button type="button" class="btn btn-primary" @onclick="GuardarEmpleado">Guardar</button>
+<p><strong>Debug:</strong> @nuevoEmpleado.Nombre - @nuevoEmpleado.Apellido - @nuevoEmpleado.Estado</p>
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="alert alert-info mt-3">@mensaje</div>
+}
 
 @code {
-  
     Empleado nuevoEmpleado = new();
+    string mensaje;
 
-    void GuardarEmpleado()
+    private async Task GuardarEmpleado()
     {
-        // Aquí podrías guardar en base de datos o pasar a otro componente
+        try
+        {
+            await empleadosService.EnviarEmpleadoAsync(nuevoEmpleado);
+            mensaje = "Empleado guardado correctamente.";
+            // Nav.NavigateTo("/");
+        }
+        catch (Exception ex)
+        {
+            mensaje = $"Error al guardar: {ex.Message}";
+        }
+        Console.WriteLine($"Guardando: {nuevoEmpleado.Nombre} {nuevoEmpleado.Apellido} ({nuevoEmpleado.Estado})");
 
-        Console.WriteLine($"Empleado guardado: {nuevoEmpleado.Nombre} {nuevoEmpleado.Apellido} ({nuevoEmpleado.Estado})");
-        Nav.NavigateTo("/");
     }
 }

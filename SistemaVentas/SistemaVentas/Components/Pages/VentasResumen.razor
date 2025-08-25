@@ -1,9 +1,9 @@
-﻿@page "/estadoapi"
+﻿@page "/resumenventas"
 @attribute [StreamRendering]
 
-@inject IStatusApiService estadoApi
+@inject IConsultaVentasService totalVentasService
 
-<PageTitle>Consulta Api</PageTitle>
+<PageTitle>Consulta Total Ventas</PageTitle>
 
 <h3>@Status</h3>
 
@@ -18,7 +18,7 @@
         Status = "Cargando..";
         try
         {
-            ResultadoServicio = await estadoApi.ObtenerInformacionStatus();
+            ResultadoServicio = await totalVentasService.ObtenerTotalVentas();
             Status = ResultadoServicio;
 
         }
@@ -27,7 +27,5 @@
             Status = "Se encontró error en el servicio";
         }
     }
-
-
 
 }

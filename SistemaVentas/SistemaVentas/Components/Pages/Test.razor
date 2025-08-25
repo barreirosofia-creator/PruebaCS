@@ -1,0 +1,16 @@
+﻿@page "/test"
+
+<h3>Botón de prueba</h3>
+
+<button type="button" class="btn btn-success" @onclick="CambiarMensaje">Click aquí</button>
+
+<p>@mensaje</p>
+
+@code {
+    string mensaje = "Esperando...";
+
+    void CambiarMensaje()
+    {
+        mensaje = "¡Evento ejecutado!";
+    }
+}

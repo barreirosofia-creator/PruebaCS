@@ -1,52 +1,46 @@
 ﻿@page "/"
-@using SistemaVentas.Data
+@using SistemaVentas.Models
 @inject NavigationManager Nav
+@inject IEmpleadoApiService EmpleadosService
+@inject IConexionDbService ConexionDbService
 
 <h2>Listado de empleados</h2>
 
 <div class="empleados-container">
-    <table>
-        <tr>
-            <td>
-                <div class="empleados-activos">
-                    <h3>Empleados activos</h3>
-                    <ul>
-                        @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Activo))
-                        {
-                            <li>@emp.Nombre @emp.Apellido</li>
-                        }
-                    </ul>
-                </div>
+    <div class="empleados-columna-izquierda w-50">
+        <div class="empleados-activos">
+            <h3>Empleados activos</h3>
+            <ul>
+                @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Activo))
+                {
+                    <li>@emp.Nombre @emp.Apellido</li>
+                }
+            </ul>
+        </div>
 
-                <div class="empleados-inactivos">
-                    <h3>Empleados inactivos</h3>
-                    <ul>
-                        @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Inactivo))
-                        {
-                            <li>@emp.Nombre @emp.Apellido</li>
-                        }
-                    </ul>
-                </div>
-            </td>
-            <td>
-                <div class="empleados-total">
-                    <h3>Todos los empleados</h3>
-                    <ul>
-                        @foreach (var emp in empleados)
-                        {
-                            <li>@emp.Nombre @emp.Apellido (@emp.Estado)</li>
-                        }
-                    </ul>
-                </div>
-            </td>
-        </tr>
-    </table>
+        <div class="empleados-inactivos ">
+            <h3>Empleados inactivos</h3>
+            <ul>
+                @foreach (var emp in empleados.Where(e => e.Estado == EstadoEmpleado.Inactivo))
+                {
+                    <li>@emp.Nombre @emp.Apellido</li>
+                }
+            </ul>
+        </div>
+    </div>
+        <div class="empleados-total w-50" style="border: 2px solid #ccc; border-radius: 10px; padding: 15px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1);" >
+        <h3>Todos los empleados</h3>
+        <ul>
+            @foreach (var emp in empleados)
+            {
+                <li>@emp.Nombre @emp.Apellido (@emp.Estado)</li>
+            }
+        </ul>
+    </div>
 </div>
 
-<a class="btn-nuevo" @onclick="IrANuevo">Agregar nuevo empleado</a>
-<button type="button" @onclick="IrANuevo" id="botonEnviarAlerta">Send</button>
-
 @code {
+
     List<Empleado> empleados = new()
     {
         new Empleado { Nombre = "Juan", Apellido = "Pérez", Estado = EstadoEmpleado.Activo },
@@ -54,8 +48,15 @@
         new Empleado { Nombre = "Luis", Apellido = "Martínez", Estado = EstadoEmpleado.Activo }
     };
 
-    private void IrANuevo()
+
+    private string mensaje = "Verificando conexión...";
+
+    protected override async Task OnInitializedAsync()
     {
-        Nav.NavigateTo("/nuevo");
+        var conectado = await ConexionDbService.ProbarConexionAsync();
+        mensaje = conectado ? "✅ Conexión exitosa con EF" : "❌ Falló la conexión";
     }
+
+
+
 }
